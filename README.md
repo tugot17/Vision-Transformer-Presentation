@@ -8,7 +8,7 @@ Presentation on Visual Transformer conducted at Wrocław University of Science a
 
 We discuss findings presented in [An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929) by Dosovitskiy, et al. and some earlier works. We introduce the concept of Vision Transformer, evaluate its advantages and disadvantages and make a few predictions on the future of the domain. 
 
-Presentation avalible at: [tugot17.github.io/Vision-Transformer-Presentation]((https://tugot17.github.io/Vision-Transformer-Presentation)
+Presentation avalible at: [tugot17.github.io/Vision-Transformer-Presentation](https://tugot17.github.io/Vision-Transformer-Presentation)
 
 <img src="assets/vit.gif" width="500px"></img>
 
