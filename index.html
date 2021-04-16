@@ -135,19 +135,12 @@
 
         </section>
 
+
         <section>
             <h2>BERT</h2>
-            <ul>
-                <li>...</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>[CLS] token</h2>
-
-            <ul>
-                <li>...</li>
-            </ul>
+            <img src="assets/bert_cls_token.png" style="height:60vh"> <br>
+            <small>Source: <a href="https://arxiv.org/abs/1810.04805"> BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding </a>
+                <br>Devlin et al. 2018</small>
         </section>
 
         <section>
@@ -212,7 +205,7 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
             <img src="assets/encoder.png" style="height: 50vh"> <br>
 
             <small>
-                We have input embedding - patches matrix of size $(196, 768)$<br>
+                We have input (patches) embedding - patches matrix of size $(196, 768)$<br>
                 We still need position embedding
             </small>
         </section>
@@ -239,12 +232,19 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
         </section>
 
 
-
         <section>
             <h3>Vision Transformer put together</h3>
             <img src="assets/vit_horizontaly.png" style="height: 40vh"> <br>
-            <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
-                <br>Dosovitskiy et al. 2020</small>
+            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
+                <br>Bukhari 2021</small>
+        </section>
+
+        <section>
+            <h2>Patch embeddings</h2>
+
+            <img src="assets/transformers.png" style="height: 30vh"> <br>
+            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
+                <br>Bukhari 2021</small>
         </section>
 
 
@@ -252,17 +252,51 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
             <h2>End-to-end training</h2>
             <pre><code data-trim data-noescape class="python">
 class ViT(pl.LightningModule):
-    def __init__(self, num_transformer_layers):
+    def __init__(self, num_transformer_layers, num_classes=1000):
         super().__init__()
         self.criterion = nn.CrossEntropyLoss()
 
-        encoder_layer = nn.TransformerEncoderLayer(d_model=512, nhead=8)
+        self.conv_embedding = nn.Conv2d(3, 768, 16, 16)
+
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
+
+        encoder_layer = nn.TransformerEncoderLayer(d_model=768, nhead=8)
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_transformer_layers)
 
+        self.mlp_head = nn.Linear(768, num_classes)
 
+        self.position_embedding_layer = nn.Embedding(197, 768)
 
     def forward(self, x):
-        return self.model(x)
+
+        batch_size = x.shape[0]
+        cls_tokens = self.cls_token.expand(batch_size, -1, -1)
+
+
+        #(batch_size, 196, 768)
+        patches_embedding = self.conv_embedding(x).reshape(-1, 196).transpose(0,1)
+
+        #(batch_size, 197, 768)
+        patches_embedding = torch.cat((cls_tokens, patches_embedding), dim=1)
+
+        #(batch_size, 196); 0, 0, ... 196, 196
+        positions  = self._assign_positions_to_patches(
+
+        #(batch_size, 197, 768)
+        position_embedding = position_embedding_layer(positions)
+
+        #(batch_size, 197, 768)
+        final_embedding = patches_embedding + position_embedding
+
+        #(batch_size, 197, 768)
+        embedding_output = self.transformer_encoder(final_embedding)
+
+        #(batch_size, 768)
+        cls_vector = embedding_output[:, 0, :]
+
+        #(batch_size, num_classes)
+        return mlp_head(cls_vector)
+
 
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -273,25 +307,15 @@ class ViT(pl.LightningModule):
 
             </code></pre>
         </section>
-        </section>
-
 
         <section>
-            <h2>How good is performance</h2>
-            <h3>TL; DR</h3>
+            <h3>How good is ViT performance?</h3>
+            <h4>TL; DR</h4>
 
             <ul>
                 <li>Worst then Resnet when trained just on ImageNet</li>
                 <li>Performance improved when pre-trained on big (and I mean it) dataset</li>
                 <li>Pretrained outperforms much bigger CNNs</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Is it that big deal?</h2>
-
-            <ul>
-                <li>...</li>
             </ul>
         </section>
 
@@ -310,17 +334,66 @@ class ViT(pl.LightningModule):
             <h4 class="fragment">Otherwise use EfficientNet, It is fine</h4>
             <small class="fragment">It takes 2.5k TPUv3 core days to train best ViT model</small>
             <small class="fragment">At around USD 0.5 per core TPU/h, 2.5k*0.5*24h=USD 30,000</small>
+        </section>
+
+        <section>
+            <h3>Critics</h3>
+            <ul>
+                <li class="fragment">Better results - only with more data</li>
+                <li class="fragment">Cost of training is ridiculously high (30k$)</li>
+                <li class="fragment">Is it really that different from Convolutions?</li>
+            </ul>
+        </section>
 
 
+        <section>
+            <h3>Paper's impact</h3>
+            First time transformers outperform CNNs in CV<br><br>
+            2021 - Year of transformers in CV?
+        </section>
+
+        <section>
+            <h3>Paper's impact</h3>
+            Already new, similar architectures have emerged
+
+            <img src="assets/swin_transformer.png" style="height: 50vh"> <br>
+            <small>Source: <a href="https://arxiv.org/abs/2103.14030">Swin Transformer: Hierarchical Vision Transformer
+                using Shifted Windows </a>
+                <br>Liu et al. 2021</small>
+        </section>
+
+        <section>
+            <h3>Predictions #1</h3>
+            <blockquote>Transformers originally were seq2seq models, using ViT as
+                a tool for captioning images is a "no-brainier"
+            </blockquote>
+        </section>
+
+
+        <section>
+            <h3>Predictions #2</h3>
+            <blockquote>BERT like embedding for images - prototyping CV models drastically accelerated</blockquote>
+        </section>
+
+
+        <section>
+            <h3>Predictions #3</h3>
+            <blockquote>EVEN bigger models - even better image classification</blockquote>
+        </section>
+
+
+        <section>
+            <h3>Predictions #4</h3>
+            <blockquote>More sophisticated (yet efficient) approach for patches</blockquote>
         </section>
 
 
         <section>
             <h2>Thanks</h2>
-            <blockquote>"There's no such thing as a stupid question!"</blockquote>
+            <blockquote>"Feel free to ask any question"</blockquote>
             <p>
-                <small>Authors</small><br/>
-                <small><a href="">Links</a></small><br/>
+                <small>Piotr Mazurek</small><br/>
+                <small><a href=" https://tugot17.github.io/Vision-Transformer-Presentation/">tugot17.github.io/Vision-Transformer-Presentation/</a></small><br/>
             </p>
         </section>
     </div>
