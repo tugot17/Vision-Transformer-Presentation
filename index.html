@@ -1,70 +1,330 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="author" content="Kemal Erdem">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="Piotr Mazurek">
 
-  <title>Presentation Template by Kemal Erdem</title>
+    <title>Vision Transformer</title>
 
-  <link rel="stylesheet" href="dist/reset.css">
-  <link rel="stylesheet" href="dist/reveal.css">
-  <link rel="stylesheet" href="dist/custom.css">
-  <link rel="stylesheet" href="plugin/pointer/pointer.css">
-  <link rel="stylesheet" href="plugin/drawer/drawer.css">
-  <link rel="stylesheet" href="dist/theme/black.css" id="theme">
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/custom.css">
+    <link rel="stylesheet" href="plugin/pointer/pointer.css">
+    <link rel="stylesheet" href="plugin/drawer/drawer.css">
+    <link rel="stylesheet" href="dist/theme/sky.css" id="theme">
 
-  <!-- Theme used for syntax highlighting of code -->
-  <link rel="stylesheet" href="css/highlight/isbl-editor-light.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="css/highlight/isbl-editor-light.css">
 </head>
 <body>
 <div class="reveal">
-  <div class="slides">
-    <section>
-      <h2>Presentation Template</h2>
-      <small>Authors...</small>
-    </section>
-    <section>
-      <h2>Presentation pointer</h2>
-      <h5>("Q" for pointer)</h5>
-      <a href="https://github.com/burnpiro/reveal-pointer">Check plugin's page for details</a>
-    </section>
-    <section>
-      <h2>Drawing board </h2>
-      <h5>("T" to toggle drawing board)</h5>
-      <p class="small">("D" to toggle drawing)</p>
-      <p class="small">("Ctrl + z" to remove last line)</p>
-      <p class="small">"1", "2", "3", "4" to change colors<br/>
-        (depends on your color list, if you have 5 colors then 1,2,3,4,5 etc)</p>
-      <a class="small" href="https://github.com/burnpiro/reveal-drawer">Check plugin's page for details</a>
-    </section>
-    <section>
-      <h2>Slide 1</h2>
-      <p class="fragment">
-        ABC
-        $$
-        L_{a}T_{e}X
-        $$
-      </p>
-      <pre><code data-trim data-noescape>
-(def lazy-fib
-  (concat
-   [0 1]
-   ((fn rfib [a b]
-        (lazy-cons (+ a b) (rfib b (+ a b)))) 0 1)))
-  </code></pre>
-    </section>
-    <section>
-      <h2>Thanks</h2>
-      <blockquote>"There's no such thing as a stupid question!"</blockquote>
-      <p>
-        <small>Authors</small><br/>
-        <small><a href="">Links</a></small><br/>
-      </p>
-    </section>
-  </div>
-</div>
+    <div class="slides">
+        <section>
+            <h2>AN IMAGE IS WORTH 16X16 WORDS</h2>
+            <h4>TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE</h4>
+            <small>Piotr Mazurek</small>
+        </section>
+        <section>
+            <h2>Presentation plan</h2>
 
+            <ol>
+                <li>Overview</li>
+                <li>Brief history of transformers</li>
+                <li>Why using transformers for CV is complicated?</li>
+                <li>How Vision Transformer (ViT) works?</li>
+                <li>ViT performance in image classification</li>
+                <li>Paper critics</li>
+                <li>Impact and my predictions (the fun part)</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Assumptions</h2>
+
+            <ul>
+                <li>You know (the basics of) PyTorch</li>
+                <li>You understand the Transformer concept</li>
+                <li>You know (more less) how BERT works ([CLS] token)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Overview</h2>
+            <img src="assets/vit.gif" style="height: 70vh"> <br>
+            <small>Source: <a href="https://github.com/lucidrains/vit-pytorch"> lucidrains/vit-pytorch </a></small>
+        </section>
+
+        <section>
+            <h2>Overview</h2>
+            <ul>
+                <li>Divide the input image to 196 (14x14) small images of size (16x16)</li>
+                <li>Treat it as embedding in NLP</li>
+                <li>Use it as an input for traditional transformer encoder (like in BERT)</li>
+                <li>Use 12 transformer layers (Norm, Multi-head attention, etc.)</li>
+                <li>Take last output, use it as an input fot Dense Layer with 1000 classes</li>
+                <li>Voilà - you have a classification model</li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h3>Attention is all you need</h3>
+            <p class="display-row">
+
+                <img src="assets/attention.jpg" style="height: 70vh"> <br>
+                <small>Source: <a
+                        href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a><br>Vaswani et al.
+                    2017</small>
+            </p>
+        </section>
+
+        <section>
+            <h3>Transformer Encoder</h3>
+            <img src="assets/encoder.png" style="height: 50vh"> <br>
+
+            <pre><code data-trim data-noescape class="python">
+            encoder_layer = nn.TransformerEncoderLayer(d_model=512,
+                                                        nhead=8)
+
+            transformer_encoder = nn.TransformerEncoder(encoder_layer,
+                                                        num_layers=6)
+            </code></pre>
+        </section>
+
+        <section>
+            <h4>Why don't wr use full image for transformer?</h4>
+
+            <div class="fragment">Because <b>complexity</b></div>
+
+            <p class="fragment">
+                We need to store $n^2$ parameters
+            </p>
+
+            <p class="fragment">
+                $(3*224*224)^2 = 22\: billion\: parameters$
+            </p>
+            <div class="fragment">
+                <img src="assets/Visualizing-self-attention.png" style="height: 50vh"> <br>
+                <small>Source: <a
+                        href="https://www.researchgate.net/publication/323587007_Deep_Learning_Based_Chatbot_Models">
+                    Deep Learning Based Chatbot Models </a><br>Csaky 2017</small>
+            </div>
+        </section>
+
+        <section>
+            <h2>Self Attention</h2>
+            <h4>Query, Value, Key</h4>
+            $\text{Attention}(Q, K, V) = \text{softmax}(\frac{QK^T}{\sqrt{d_k}})V$<br>
+
+            For a input sequence of size $n$ tokens in sequence with $d$ embedding size<br>
+            <p class="display-row">
+            <ul>
+                <li>$Q$ size: $(n,d)$</li>
+                <li>$K^T$ size: $(d)$</li>
+                <li>$Q$ size: $(n,d)$</li>
+            </ul>
+
+            <ul>
+                <li>$QK^T$: $n^2$ complexity</li>
+                <li>$softmax$: $n^2$ complexity</li>
+                <li>$(QK^T)V$ $n^2$ complexity</li>
+            </ul>
+            </p>
+
+
+        </section>
+
+        <section>
+            <h2>BERT</h2>
+            <ul>
+                <li>...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>[CLS] token</h2>
+
+            <ul>
+                <li>...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Architecture recap</h2>
+            <img src="assets/ViT.png" style="height: 60vh"> <br>
+            <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
+                <br>Dosovitskiy et al. 2020</small>
+
+        </section>
+
+        <section>
+            <h2>Patch embeddings</h2>
+            <small>Image of size $(3, 224, 224)$<br>
+
+                Divided into $196\: (14 \times 14)$ patches of size $3 \times 16 \times 16$<br>
+
+                16*14 = 224 (original image size)
+            </small>
+
+            <img src="assets/patches_1.png" style="height: 50vh"> <br>
+            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
+                <br>Bukhari 2021</small>
+
+        </section>
+
+        <section>
+            <h2>Patch embeddings</h2>
+            Each patch is converted into a vector of size $3 \times 16 \times 16 = 768$<br>
+
+            So after that we have <b>196</b> vectors of size <b>768</b>, a matrix of size $(196, 768)$
+        </section>
+
+        <section>
+            <h2>Patch embeddings</h2>
+
+            <img src="assets/patches_conv.png" style="height: 40vh"> <br>
+            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
+                <br>Bukhari 2021</small>
+
+            <pre><code data-trim data-noescape class="python">
+x = torch.randn(1, 3, 224, 224)
+# 2D conv
+conv = nn.Conv2d(3, 768, 16, 16)
+conv(x).reshape(-1, 196).transpose(0,1).shape
+>> torch.Size([196, 768])
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>[CLS] Token</h2>
+            <img src="assets/cls_patches.png" style="height: 40vh"> <br>
+            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
+                <br>Bukhari 2021</small>
+            <small>Similarly to the situation in BERT we need to add a [CLS] token<br>
+                [CLS] token is a vector of size $(1, 768)$<br>
+                The final patch matrix has size $(197, 768)$, 196 from patches and 1 [CLS] token
+            </small>
+        </section>
+
+        <section>
+            <h3>Transformer encoder recap</h3>
+            <img src="assets/encoder.png" style="height: 50vh"> <br>
+
+            <small>
+                We have input embedding - patches matrix of size $(196, 768)$<br>
+                We still need position embedding
+            </small>
+        </section>
+
+        <section>
+            <h2>Position embedding</h2>
+            <img src="assets/positions.png" style="height: 30vh"> <br>
+            <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
+                <br>Dosovitskiy et al. 2020</small>
+
+            <small>
+                <blockquote>"We use standard learnable 1D position embeddings and the resulting sequence of embedding
+                    vectors serves as input to the encoder"
+                </blockquote>
+
+            </small>
+        </section>
+
+        <section>
+            <h2>Position embedding similarities</h2>
+            <img src="assets/positions_similarities.png" style="height: 50vh"> <br>
+            <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
+                <br>Dosovitskiy et al. 2020</small>
+        </section>
+
+
+
+        <section>
+            <h3>Vision Transformer put together</h3>
+            <img src="assets/vit_horizontaly.png" style="height: 40vh"> <br>
+            <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
+                <br>Dosovitskiy et al. 2020</small>
+        </section>
+
+
+        <section>
+            <h2>End-to-end training</h2>
+            <pre><code data-trim data-noescape class="python">
+class ViT(pl.LightningModule):
+    def __init__(self, num_transformer_layers):
+        super().__init__()
+        self.criterion = nn.CrossEntropyLoss()
+
+        encoder_layer = nn.TransformerEncoderLayer(d_model=512, nhead=8)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_transformer_layers)
+
+
+
+    def forward(self, x):
+        return self.model(x)
+
+    def training_step(self, batch, batch_idx):
+        x, y = batch
+        logits = self.forward(x)
+        loss = self.criterion(logits, y)
+        return loss
+
+
+            </code></pre>
+        </section>
+        </section>
+
+
+        <section>
+            <h2>How good is performance</h2>
+            <h3>TL; DR</h3>
+
+            <ul>
+                <li>Worst then Resnet when trained just on ImageNet</li>
+                <li>Performance improved when pre-trained on big (and I mean it) dataset</li>
+                <li>Pretrained outperforms much bigger CNNs</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Is it that big deal?</h2>
+
+            <ul>
+                <li>...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Rule of thumb</h2>
+
+            <h4 class="fragment">Are you?</h4>
+
+            <ul class="fragment">
+                <li>A FAANG company</li>
+                <li>A research lab with a budget equal to the GDP of a developing country</li>
+            </ul>
+
+            <h4 class="fragment">ViT may be for you</h4>
+
+            <h4 class="fragment">Otherwise use EfficientNet, It is fine</h4>
+            <small class="fragment">It takes 2.5k TPUv3 core days to train best ViT model</small>
+            <small class="fragment">At around USD 0.5 per core TPU/h, 2.5k*0.5*24h=USD 30,000</small>
+
+
+        </section>
+
+
+        <section>
+            <h2>Thanks</h2>
+            <blockquote>"There's no such thing as a stupid question!"</blockquote>
+            <p>
+                <small>Authors</small><br/>
+                <small><a href="">Links</a></small><br/>
+            </p>
+        </section>
+    </div>
+</div>
 
 
 <script src="dist/reveal.js"></script>
@@ -77,57 +337,57 @@
 <script src="plugin/pointer/pointer.js"></script>
 <script src="plugin/drawer/drawer.js"></script>
 <script>
-  // More info about config & dependencies:
-  // - https://github.com/hakimel/reveal.js#configuration
-  // - https://github.com/hakimel/reveal.js#dependencies
-  Reveal.initialize({
-    hash: true,
-    controls: true,
-    progress: true,
-    slideNumber: false,
-    overview: true,
-    center: true,
-    navigationMode: 'default',
-    fragmentInURL: false,
-    embedded: false,
-    preloadIframes: null,
-    autoSlide: 0,
-    autoSlideStoppable: true,
-    defaultTiming: 120,
-    mouseWheel: false,
-    previewLinks: false,
-    transition: 'slide', // none/fade/slide/convex/concave/zoom
-    transitionSpeed: 'default', // default/fast/slow
-    backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
-    display: 'block',
-    math: {
-      // mathjax: 'plugin/math/MathJax.js', // You can download MathJax locally and keep it in plugins folder
-      config: 'TeX-AMS_HTML-full', // See http://docs.mathjax.org/en/latest/config-files.html
-      // pass other options into `MathJax.Hub.Config()`
-      TeX: { Macros: { RR: "{\\bf R}" } }
-    },
-    menu: {
-      themes: [
-        { name: 'Default', theme: 'dist/theme/black.css' },
-        { name: 'Dark', theme: 'dist/theme/blood.css' },
-        { name: 'Simple', theme: 'dist/theme/simple.css' },
-        { name: 'Serif', theme: 'dist/theme/serif.css' },
-        { name: 'Night', theme: 'dist/theme/night.css' },
-        { name: 'Blue', theme: 'dist/theme/sky.css' },
-      ]
-    },
-    pointer: {
-      color: "red",
-      pointerSize: 18,
-      alwaysVisible: false
-    },
-    drawer: {
-      toggleBoardKey: "t",
-      toggleDrawKey: "d",
-      pathSize: 4
-    },
-    plugins: [ RevealZoom, RevealMarkdown, RevealHighlight, RevealNotes, RevealMath, RevealMenu, RevealPointer, RevealDrawer ]
-  });
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        slideNumber: true,
+        overview: true,
+        center: true,
+        navigationMode: 'default',
+        fragmentInURL: false,
+        embedded: false,
+        preloadIframes: null,
+        autoSlide: 0,
+        autoSlideStoppable: true,
+        defaultTiming: 120,
+        mouseWheel: false,
+        previewLinks: false,
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        transitionSpeed: 'default', // default/fast/slow
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+        display: 'block',
+        math: {
+            // mathjax: 'plugin/math/MathJax.js', // You can download MathJax locally and keep it in plugins folder
+            config: 'TeX-AMS_HTML-full', // See http://docs.mathjax.org/en/latest/config-files.html
+            // pass other options into `MathJax.Hub.Config()`
+            TeX: {Macros: {RR: "{\\bf R}"}}
+        },
+        menu: {
+            themes: [
+                {name: 'Default', theme: 'dist/theme/black.css'},
+                {name: 'Dark', theme: 'dist/theme/blood.css'},
+                {name: 'Simple', theme: 'dist/theme/simple.css'},
+                {name: 'Serif', theme: 'dist/theme/serif.css'},
+                {name: 'Night', theme: 'dist/theme/night.css'},
+                {name: 'Blue', theme: 'dist/theme/sky.css'},
+            ]
+        },
+        pointer: {
+            color: "red",
+            pointerSize: 18,
+            alwaysVisible: false
+        },
+        drawer: {
+            toggleBoardKey: "t",
+            toggleDrawKey: "d",
+            pathSize: 4
+        },
+        plugins: [RevealZoom, RevealMarkdown, RevealHighlight, RevealNotes, RevealMath, RevealMenu, RevealPointer, RevealDrawer]
+    });
 </script>
 </body>
 </html>
