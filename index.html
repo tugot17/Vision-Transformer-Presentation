@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="author" content="Kemal Erdem">
+
+  <title>Presentation Template by Kemal Erdem</title>
+
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/custom.css">
+  <link rel="stylesheet" href="plugin/pointer/pointer.css">
+  <link rel="stylesheet" href="plugin/drawer/drawer.css">
+  <link rel="stylesheet" href="dist/theme/black.css" id="theme">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="css/highlight/isbl-editor-light.css">
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section>
+      <h2>Presentation Template</h2>
+      <small>Authors...</small>
+    </section>
+    <section>
+      <h2>Presentation pointer</h2>
+      <h5>("Q" for pointer)</h5>
+      <a href="https://github.com/burnpiro/reveal-pointer">Check plugin's page for details</a>
+    </section>
+    <section>
+      <h2>Drawing board </h2>
+      <h5>("T" to toggle drawing board)</h5>
+      <p class="small">("D" to toggle drawing)</p>
+      <p class="small">("Ctrl + z" to remove last line)</p>
+      <p class="small">"1", "2", "3", "4" to change colors<br/>
+        (depends on your color list, if you have 5 colors then 1,2,3,4,5 etc)</p>
+      <a class="small" href="https://github.com/burnpiro/reveal-drawer">Check plugin's page for details</a>
+    </section>
+    <section>
+      <h2>Slide 1</h2>
+      <p class="fragment">
+        ABC
+        $$
+        L_{a}T_{e}X
+        $$
+      </p>
+      <pre><code data-trim data-noescape>
+(def lazy-fib
+  (concat
+   [0 1]
+   ((fn rfib [a b]
+        (lazy-cons (+ a b) (rfib b (+ a b)))) 0 1)))
+  </code></pre>
+    </section>
+    <section>
+      <h2>Thanks</h2>
+      <blockquote>"There's no such thing as a stupid question!"</blockquote>
+      <p>
+        <small>Authors</small><br/>
+        <small><a href="">Links</a></small><br/>
+      </p>
+    </section>
+  </div>
+</div>
+
+
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/zoom/zoom.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script src="plugin/math/math.js"></script>
+<script src="plugin/menu/menu.js"></script>
+<script src="plugin/pointer/pointer.js"></script>
+<script src="plugin/drawer/drawer.js"></script>
+<script>
+  // More info about config & dependencies:
+  // - https://github.com/hakimel/reveal.js#configuration
+  // - https://github.com/hakimel/reveal.js#dependencies
+  Reveal.initialize({
+    hash: true,
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    overview: true,
+    center: true,
+    navigationMode: 'default',
+    fragmentInURL: false,
+    embedded: false,
+    preloadIframes: null,
+    autoSlide: 0,
+    autoSlideStoppable: true,
+    defaultTiming: 120,
+    mouseWheel: false,
+    previewLinks: false,
+    transition: 'slide', // none/fade/slide/convex/concave/zoom
+    transitionSpeed: 'default', // default/fast/slow
+    backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+    display: 'block',
+    math: {
+      // mathjax: 'plugin/math/MathJax.js', // You can download MathJax locally and keep it in plugins folder
+      config: 'TeX-AMS_HTML-full', // See http://docs.mathjax.org/en/latest/config-files.html
+      // pass other options into `MathJax.Hub.Config()`
+      TeX: { Macros: { RR: "{\\bf R}" } }
+    },
+    menu: {
+      themes: [
+        { name: 'Default', theme: 'dist/theme/black.css' },
+        { name: 'Dark', theme: 'dist/theme/blood.css' },
+        { name: 'Simple', theme: 'dist/theme/simple.css' },
+        { name: 'Serif', theme: 'dist/theme/serif.css' },
+        { name: 'Night', theme: 'dist/theme/night.css' },
+        { name: 'Blue', theme: 'dist/theme/sky.css' },
+      ]
+    },
+    pointer: {
+      color: "red",
+      pointerSize: 18,
+      alwaysVisible: false
+    },
+    drawer: {
+      toggleBoardKey: "t",
+      toggleDrawKey: "d",
+      pathSize: 4
+    },
+    plugins: [ RevealZoom, RevealMarkdown, RevealHighlight, RevealNotes, RevealMath, RevealMenu, RevealPointer, RevealDrawer ]
+  });
+</script>
+</body>
+</html>
