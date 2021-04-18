@@ -30,8 +30,8 @@ layer and
 the output of this operation is used for image classification.
 
 The obtained results are very impressive. Using the transformer-only architecture it was possible to outperform the much bigger CNN models when given enough data. However, the same effect was not present when trained on smaller datasets (e.g ImageNet).
-It suggests, that similarly to the situation present in NLP problems, transformers require much bigger amounts of data to
-perform well, but when given they achieve outstanding results.
+It suggests that similarly to the situation present in NLP problems transformers require much bigger amounts of data to
+perform well but when given they achieve outstanding results.
 
 The publication of a pure transformer architecture that is capable of surpassing CNN may announce a paradigm shift in the design of computer vision models. The number of publications already extends the concept presented by Dosovitski et al. and achieves SOTA results in tasks traditionally solved with CNNs. The demand for large chunks of data can further widen the gap between large laboratories and independent researchers in terms of the results they achieve and
 might shape the future of the domain.
