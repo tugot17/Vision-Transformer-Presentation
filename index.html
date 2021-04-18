@@ -91,7 +91,8 @@
         <section>
             <h2>BERT</h2>
             <img src="assets/bert_cls_token.png" class="r-stretch"> <br>
-            <small>Source: <a href="https://jalammar.github.io/a-visual-guide-to-using-bert-for-the-first-time/">A Visual Guide to Using BERT for the First Time</a>
+            <small>Source: <a href="https://jalammar.github.io/a-visual-guide-to-using-bert-for-the-first-time/">A
+                Visual Guide to Using BERT for the First Time</a>
                 <br>Alammar 2020</small>
         </section>
 
@@ -116,16 +117,15 @@
         </section>
 
 
-
         <section>
             <h2>Self Attention</h2>
             <h4 class="fragment">Query, Value, Key</h4>
             <div class="fragment">
-            $\text{Attention}(Q, K, V) = \text{softmax}(\frac{QK^T}{\sqrt{d_k}})V$<br>
+                $\text{Attention}(Q, K, V) = \text{softmax}(\frac{QK^T}{\sqrt{d_k}})V$<br>
             </div>
 
             <div class="fragment">
-            For an input sequence of size $n$ tokens in sequence with $d$ embedding size<br>
+                For an input sequence of size $n$ tokens in sequence with $d$ embedding size<br>
             </div>
 
             <p class="display-row">
@@ -155,26 +155,32 @@
             <h2>Patch embeddings</h2>
             <small>
 
-                <div class="fragment"> Image of size $(3, 224, 224)$</div> <br>
+                <div class="fragment"> Image of size $(3, 224, 224)$</div>
+                <br>
 
-                <div class="fragment">Divided into $196\: (14 \times 14)$ patches of size $3 \times 16 \times 16$</div><br>
+                <div class="fragment">Divided into $196\: (14 \times 14)$ patches of size $3 \times 16 \times 16$</div>
+                <br>
 
                 <div class="fragment">D16*14 = 224 (original image size)</div>
             </small>
 
             <div class="fragment">
-            <img src="assets/patches_1.png" class="r-stretch"> <br>
-            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
-                <br>Bukhari 2021</small>
+                <img src="assets/patches_1.png" class="r-stretch"> <br>
+                <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better
+                    future </a>
+                    <br>Bukhari 2021</small>
             </div>
         </section>
 
         <section>
             <h2>Patch embeddings</h2>
 
-            <div class="fragment">Each patch is converted into a vector of size $3 \times 16 \times 16 = 768$</div><br>
+            <div class="fragment">Each patch is converted into a vector of size $3 \times 16 \times 16 = 768$</div>
+            <br>
 
-            <div class="fragment">So after that, we have <b>196</b> vectors of size <b>768</b>, a matrix of size $(196, 768)$</div>
+            <div class="fragment">So after that, we have <b>196</b> vectors of size <b>768</b>, a matrix of size $(196,
+                768)$
+            </div>
         </section>
 
         <section>
@@ -239,7 +245,7 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
         <section>
             <h3>Vision Transformer put together</h3>
             <img src="assets/vit_horizontaly.png" class="r-stretch"> <br>
-            <small>Source: <a    href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
+            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
                 <br>Bukhari 2021</small>
         </section>
 
@@ -324,6 +330,13 @@ class ViT(pl.LightningModule):
         </section>
 
         <section>
+            <h2>ViT in numbers</h2>
+            <img src="assets/vit_table.png" class="r-stretch"> <br>
+            <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
+                <br>Dosovitskiy et al. 2020</small>
+        </section>
+
+        <section>
             <h2>Rule of thumb</h2>
 
             <h4 class="fragment">Are you?</h4>
@@ -371,7 +384,8 @@ class ViT(pl.LightningModule):
             Already new, similar architectures have emerged
 
             <img src="assets/swin_transformer.png" class="r-stretch"> <br>
-            <small>Source: <a href="https://arxiv.org/abs/2103.14030">Swin Transformer: Hierarchical Vision Transformer
+            <small>Source: <a href="https://arxiv.org/abs/2103.14030">Swin Transformer: Hierarchical Vision
+                Transformer
                 using Shifted Windows </a>
                 <br>Liu et al. 2021</small>
         </section>
