@@ -34,7 +34,7 @@ It suggests, that similarly to the situation present in NLP problems, transforms
 perform well, but when given they achieve outstanding results.
 
 The publication of a pure transformer architecture that is capable of surpassing CNN may announce a paradigm shift in the design of computer vision models. The number of publications already extends the concept presented by Dosovitski et al. and achieves SOTA results in tasks traditionally solved with CNNs. The demand for large chunks of data can further widen the gap between large laboratories and independent researchers in terms of the results they achieve and
-can shape the future of the domain.
+might shape the future of the domain.
 
 ## Author
 
