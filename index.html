@@ -30,12 +30,11 @@
 
             <ol>
                 <li>Overview</li>
-                <li>Brief history of transformers</li>
+                <li>A brief history of transformers</li>
                 <li>Why using transformers for CV is complicated?</li>
                 <li>How Vision Transformer (ViT) works?</li>
                 <li>ViT performance in image classification</li>
-                <li>Paper critics</li>
-                <li>Impact and my predictions (the fun part)</li>
+                <li>Critics, impact, and my predictions (the fun part)</li>
             </ol>
         </section>
 
@@ -51,37 +50,34 @@
 
         <section>
             <h2>Overview</h2>
-            <img src="assets/vit.gif" style="height: 70vh"> <br>
-            <small>Source: <a href="https://github.com/lucidrains/vit-pytorch"> lucidrains/vit-pytorch </a></small>
+            <img src="assets/vit.gif" class="r-stretch"> <br>
+            <small>Source: <a href="https://github.com/lucidrains/vit-pytorch">lucidrains/vit-pytorch </a></small>
         </section>
 
         <section>
             <h2>Overview</h2>
             <ul>
-                <li>Divide the input image to 196 (14x14) small images of size (16x16)</li>
-                <li>Treat it as embedding in NLP</li>
-                <li>Use it as an input for traditional transformer encoder (like in BERT)</li>
-                <li>Use 12 transformer layers (Norm, Multi-head attention, etc.)</li>
-                <li>Take last output, use it as an input fot Dense Layer with 1000 classes</li>
-                <li>Voilà - you have a classification model</li>
+                <li class="fragment">Divide an input image into 196 (14x14) small images of size (16x16)</li>
+                <li class="fragment">Treat it as embedding in NLP</li>
+                <li class="fragment">Use it as an input for traditional transformer encoder (like in BERT)</li>
+                <li class="fragment">Use 12 transformer layers (Norm, Multi-head attention, etc.)</li>
+                <li class="fragment">Take the last output, use it as input for Dense Layer with 1000 classes</li>
+                <li class="fragment">Voilà - you have a classification model</li>
             </ul>
         </section>
 
 
         <section>
             <h3>Attention is all you need</h3>
-            <p class="display-row">
-
-                <img src="assets/attention.jpg" style="height: 70vh"> <br>
-                <small>Source: <a
-                        href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a><br>Vaswani et al.
-                    2017</small>
-            </p>
+            <img src="assets/attention.jpg" class="r-stretch"> <br>
+            <small>Source: <a
+                    href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a><br>Vaswani et al.
+                2017</small>
         </section>
 
         <section>
             <h3>Transformer Encoder</h3>
-            <img src="assets/encoder.png" style="height: 50vh"> <br>
+            <img src="assets/encoder.png" class="r-stretch"> <br>
 
             <pre><code data-trim data-noescape class="python">
             encoder_layer = nn.TransformerEncoderLayer(d_model=512,
@@ -93,7 +89,14 @@
         </section>
 
         <section>
-            <h4>Why don't wr use full image for transformer?</h4>
+            <h2>BERT</h2>
+            <img src="assets/bert_cls_token.png" class="r-stretch"> <br>
+            <small>Source: <a href="https://jalammar.github.io/a-visual-guide-to-using-bert-for-the-first-time/">A Visual Guide to Using BERT for the First Time</a>
+                <br>Alammar 2020</small>
+        </section>
+
+        <section>
+            <h4>Why don't we use a full image for transformer?</h4>
 
             <div class="fragment">Because <b>complexity</b></div>
 
@@ -105,47 +108,44 @@
                 $(3*224*224)^2 = 22\: billion\: parameters$
             </p>
             <div class="fragment">
-                <img src="assets/Visualizing-self-attention.png" style="height: 50vh"> <br>
+                <img src="assets/Visualizing-self-attention.png" class="r-stretch"> <br>
                 <small>Source: <a
                         href="https://www.researchgate.net/publication/323587007_Deep_Learning_Based_Chatbot_Models">
                     Deep Learning Based Chatbot Models </a><br>Csaky 2017</small>
             </div>
         </section>
 
+
+
         <section>
             <h2>Self Attention</h2>
-            <h4>Query, Value, Key</h4>
+            <h4 class="fragment">Query, Value, Key</h4>
+            <div class="fragment">
             $\text{Attention}(Q, K, V) = \text{softmax}(\frac{QK^T}{\sqrt{d_k}})V$<br>
+            </div>
 
-            For a input sequence of size $n$ tokens in sequence with $d$ embedding size<br>
+            <div class="fragment">
+            For an input sequence of size $n$ tokens in sequence with $d$ embedding size<br>
+            </div>
+
             <p class="display-row">
-            <ul>
+            <ul class="fragment">
                 <li>$Q$ size: $(n,d)$</li>
                 <li>$K^T$ size: $(d)$</li>
                 <li>$Q$ size: $(n,d)$</li>
             </ul>
 
-            <ul>
+            <ul class="fragment">
                 <li>$QK^T$: $n^2$ complexity</li>
                 <li>$softmax$: $n^2$ complexity</li>
                 <li>$(QK^T)V$ $n^2$ complexity</li>
             </ul>
             </p>
-
-
-        </section>
-
-
-        <section>
-            <h2>BERT</h2>
-            <img src="assets/bert_cls_token.png" style="height:60vh"> <br>
-            <small>Source: <a href="https://arxiv.org/abs/1810.04805"> BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding </a>
-                <br>Devlin et al. 2018</small>
         </section>
 
         <section>
             <h2>Architecture recap</h2>
-            <img src="assets/ViT.png" style="height: 60vh"> <br>
+            <img src="assets/ViT.png" class="r-stretch"> <br>
             <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
                 <br>Dosovitskiy et al. 2020</small>
 
@@ -153,30 +153,34 @@
 
         <section>
             <h2>Patch embeddings</h2>
-            <small>Image of size $(3, 224, 224)$<br>
+            <small>
 
-                Divided into $196\: (14 \times 14)$ patches of size $3 \times 16 \times 16$<br>
+                <div class="fragment"> Image of size $(3, 224, 224)$</div> <br>
 
-                16*14 = 224 (original image size)
+                <div class="fragment">Divided into $196\: (14 \times 14)$ patches of size $3 \times 16 \times 16$</div><br>
+
+                <div class="fragment">D16*14 = 224 (original image size)</div>
             </small>
 
-            <img src="assets/patches_1.png" style="height: 50vh"> <br>
+            <div class="fragment">
+            <img src="assets/patches_1.png" class="r-stretch"> <br>
             <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
                 <br>Bukhari 2021</small>
-
-        </section>
-
-        <section>
-            <h2>Patch embeddings</h2>
-            Each patch is converted into a vector of size $3 \times 16 \times 16 = 768$<br>
-
-            So after that we have <b>196</b> vectors of size <b>768</b>, a matrix of size $(196, 768)$
+            </div>
         </section>
 
         <section>
             <h2>Patch embeddings</h2>
 
-            <img src="assets/patches_conv.png" style="height: 40vh"> <br>
+            <div class="fragment">Each patch is converted into a vector of size $3 \times 16 \times 16 = 768$</div><br>
+
+            <div class="fragment">So after that, we have <b>196</b> vectors of size <b>768</b>, a matrix of size $(196, 768)$</div>
+        </section>
+
+        <section>
+            <h2>Patch embeddings</h2>
+
+            <img src="assets/patches_conv.png" class="r-stretch"> <br>
             <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
                 <br>Bukhari 2021</small>
 
@@ -191,7 +195,7 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
 
         <section>
             <h2>[CLS] Token</h2>
-            <img src="assets/cls_patches.png" style="height: 40vh"> <br>
+            <img src="assets/cls_patches.png" class="r-stretch"> <br>
             <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
                 <br>Bukhari 2021</small>
             <small>Similarly to the situation in BERT we need to add a [CLS] token<br>
@@ -202,17 +206,17 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
 
         <section>
             <h3>Transformer encoder recap</h3>
-            <img src="assets/encoder.png" style="height: 50vh"> <br>
+            <img src="assets/encoder.png" class="r-stretch"> <br>
 
             <small>
-                We have input (patches) embedding - patches matrix of size $(196, 768)$<br>
+                We have input embedding - patches matrix of size $(196, 768)$<br>
                 We still need position embedding
             </small>
         </section>
 
         <section>
             <h2>Position embedding</h2>
-            <img src="assets/positions.png" style="height: 30vh"> <br>
+            <img src="assets/positions.png" class="r-stretch"> <br>
             <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
                 <br>Dosovitskiy et al. 2020</small>
 
@@ -226,7 +230,7 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
 
         <section>
             <h2>Position embedding similarities</h2>
-            <img src="assets/positions_similarities.png" style="height: 50vh"> <br>
+            <img src="assets/positions_similarities.png" class="r-stretch"> <br>
             <small>Source: <a href="https://arxiv.org/abs/2010.11929"> Vision transformer paper </a>
                 <br>Dosovitskiy et al. 2020</small>
         </section>
@@ -234,15 +238,15 @@ conv(x).reshape(-1, 196).transpose(0,1).shape
 
         <section>
             <h3>Vision Transformer put together</h3>
-            <img src="assets/vit_horizontaly.png" style="height: 40vh"> <br>
-            <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
+            <img src="assets/vit_horizontaly.png" class="r-stretch"> <br>
+            <small>Source: <a    href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
                 <br>Bukhari 2021</small>
         </section>
 
         <section>
-            <h2>Patch embeddings</h2>
+            <h2>Transformer layers</h2>
 
-            <img src="assets/transformers.png" style="height: 30vh"> <br>
+            <img src="assets/transformers.png" class="r-stretch"> <br>
             <small>Source: <a href=https://amaarora.github.io/2021/01/18/ViT.html"> Committed towards better future </a>
                 <br>Bukhari 2021</small>
         </section>
@@ -313,9 +317,9 @@ class ViT(pl.LightningModule):
             <h4>TL; DR</h4>
 
             <ul>
-                <li>Worst then Resnet when trained just on ImageNet</li>
-                <li>Performance improved when pre-trained on big (and I mean it) dataset</li>
-                <li>Pretrained outperforms much bigger CNNs</li>
+                <li class="fragment">Worse than Resnet when trained just on ImageNet</li>
+                <li class="fragment">Performance improved when pre-trained on big (and I mean it) dataset</li>
+                <li class="fragment">Pretrained outperforms much bigger CNNs</li>
             </ul>
         </section>
 
@@ -332,7 +336,7 @@ class ViT(pl.LightningModule):
             <h4 class="fragment">ViT may be for you</h4>
 
             <h4 class="fragment">Otherwise use EfficientNet, It is fine</h4>
-            <small class="fragment">It takes 2.5k TPUv3 core days to train best ViT model</small>
+            <small class="fragment">It takes 2.5k TPUv3 core days to train the best ViT model</small>
             <small class="fragment">At around USD 0.5 per core TPU/h, 2.5k*0.5*24h=USD 30,000</small>
         </section>
 
@@ -340,9 +344,19 @@ class ViT(pl.LightningModule):
             <h3>Critics</h3>
             <ul>
                 <li class="fragment">Better results - only with more data</li>
-                <li class="fragment">Cost of training is ridiculously high (30k$)</li>
+                <li class="fragment">The cost of training from scratch is ridiculously high (30k$)</li>
                 <li class="fragment">Is it really that different from Convolutions?</li>
             </ul>
+        </section>
+
+        <section>
+            <h3>Paper's impact</h3>
+            <h5>New punchline: <b>Is worth</b></h5>
+
+            <a href="https://arxiv.org/abs/2103.13915">An Image is Worth 16x16 Words, What is a Video Worth?</a><br><br>
+
+            <a href="https://arxiv.org/abs/2103.13915">A Video Is Worth Three Views: Trigeminal Transformers for
+                Video-based Person Re-identification</a>
         </section>
 
 
@@ -356,14 +370,14 @@ class ViT(pl.LightningModule):
             <h3>Paper's impact</h3>
             Already new, similar architectures have emerged
 
-            <img src="assets/swin_transformer.png" style="height: 50vh"> <br>
+            <img src="assets/swin_transformer.png" class="r-stretch"> <br>
             <small>Source: <a href="https://arxiv.org/abs/2103.14030">Swin Transformer: Hierarchical Vision Transformer
                 using Shifted Windows </a>
                 <br>Liu et al. 2021</small>
         </section>
 
         <section>
-            <h3>Predictions #1</h3>
+            <h3>Prediction #1</h3>
             <blockquote>Transformers originally were seq2seq models, using ViT as
                 a tool for captioning images is a "no-brainier"
             </blockquote>
@@ -371,19 +385,19 @@ class ViT(pl.LightningModule):
 
 
         <section>
-            <h3>Predictions #2</h3>
+            <h3>Prediction #2</h3>
             <blockquote>BERT like embedding for images - prototyping CV models drastically accelerated</blockquote>
         </section>
 
 
         <section>
-            <h3>Predictions #3</h3>
+            <h3>Prediction #3</h3>
             <blockquote>EVEN bigger models - even better image classification</blockquote>
         </section>
 
 
         <section>
-            <h3>Predictions #4</h3>
+            <h3>Prediction #4</h3>
             <blockquote>More sophisticated (yet efficient) approach for patches</blockquote>
         </section>
 
@@ -393,7 +407,7 @@ class ViT(pl.LightningModule):
             <blockquote>"Feel free to ask any question"</blockquote>
             <p>
                 <small>Piotr Mazurek</small><br/>
-                <small><a href=" https://tugot17.github.io/Vision-Transformer-Presentation/">tugot17.github.io/Vision-Transformer-Presentation/</a></small><br/>
+                <small><a href="https://tugot17.github.io/Vision-Transformer-Presentation/">tugot17.github.io/Vision-Transformer-Presentation/</a></small><br/>
             </p>
         </section>
     </div>
