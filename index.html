@@ -116,33 +116,6 @@
             </div>
         </section>
 
-
-        <section>
-            <h2>Self Attention</h2>
-            <h4 class="fragment">Query, Value, Key</h4>
-            <div class="fragment">
-                $\text{Attention}(Q, K, V) = \text{softmax}(\frac{QK^T}{\sqrt{d_k}})V$<br>
-            </div>
-
-            <div class="fragment">
-                For an input sequence of size $n$ tokens in sequence with $d$ embedding size<br>
-            </div>
-
-            <p class="display-row">
-            <ul class="fragment">
-                <li>$Q$ size: $(n,d)$</li>
-                <li>$K^T$ size: $(d)$</li>
-                <li>$Q$ size: $(n,d)$</li>
-            </ul>
-
-            <ul class="fragment">
-                <li>$QK^T$: $n^2$ complexity</li>
-                <li>$softmax$: $n^2$ complexity</li>
-                <li>$(QK^T)V$ $n^2$ complexity</li>
-            </ul>
-            </p>
-        </section>
-
         <section>
             <h2>Architecture recap</h2>
             <img src="assets/ViT.png" class="r-stretch"> <br>
@@ -289,7 +262,7 @@ class ViT(pl.LightningModule):
         #(batch_size, 197, 768)
         patches_embedding = torch.cat((cls_tokens, patches_embedding), dim=1)
 
-        #(batch_size, 196); 0, 0, ... 196, 196
+        #(batch_size, 197); 0, 0, ... 196, 196
         positions  = self._assign_positions_to_patches(
 
         #(batch_size, 197, 768)
@@ -424,6 +397,34 @@ class ViT(pl.LightningModule):
                 <small><a href="https://tugot17.github.io/Vision-Transformer-Presentation/">tugot17.github.io/Vision-Transformer-Presentation/</a></small><br/>
             </p>
         </section>
+
+        <section>
+            <h2>Self Attention</h2>
+            <h4 class="fragment">Query, Value, Key</h4>
+            <div class="fragment">
+                $\text{Attention}(Q, K, V) = \text{softmax}(\frac{QK^T}{\sqrt{d_k}})V$<br>
+            </div>
+
+            <div class="fragment">
+                For an input sequence of size $n$ tokens in sequence with $d$ embedding size<br>
+            </div>
+
+            <p class="display-row">
+            <ul class="fragment">
+                <li>$Q$ size: $(n,d)$</li>
+                <li>$K^T$ size: $(d, n)$</li>
+                <li>$Q$ size: $(n,d)$</li>
+            </ul>
+
+            <ul class="fragment">
+                <li>$QK^T$: $n^2$ complexity</li>
+                <li>$softmax$: $n^2$ complexity</li>
+                <li>$(QK^T)V$ $n^2$ complexity</li>
+            </ul>
+            </p>
+        </section>
+
+
     </div>
 </div>
 
