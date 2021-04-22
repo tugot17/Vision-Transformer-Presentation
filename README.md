@@ -1,4 +1,4 @@
-# NF-Nets-Presentation
+# Vision-Transformer-Presentation
 
 
 [![Website perso.crans.org](https://img.shields.io/website-up-down-green-red/http/perso.crans.org.svg)](https://tugot17.github.io/Vision-Transformer-Presentation)
@@ -13,9 +13,6 @@ Presentation available at: [tugot17.github.io/Vision-Transformer-Presentation](h
 <img src="assets/vit.gif" width="500px"></img>
 
 Gif by: [lucidrains](https://github.com/lucidrains/vit-pytorch)
-
-## Video Summary
-
 
 
 ## TL;DR
