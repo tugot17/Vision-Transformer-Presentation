@@ -24,8 +24,8 @@ In October 2020 Dosovitskiy et al. proposed a new computer vision architecture -
 Even though it is used for computer vision tasks, it has no convolutional layers.
 Authors show that it is possible to build a SOTA model using a pure transformer approach - something that until now was not possible.
 
-To avoid the quadratic complexity issue present in transformers, authors divide input images into small patches of local pixels.
-This plays a similar role to input embedding in NLP problems. Later that embedding is fed into the transformer-encoder 
+To avoid the quadratic complexity issue present in transformers, authors divide input images into a sequence of small patches of local pixels.
+This plays a similar role to input word embedding in NLP problems. Later that embedding is fed into the transformer-encoder 
 layer and
 the output of this operation is used for image classification.
 
